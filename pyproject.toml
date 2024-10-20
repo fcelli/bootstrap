@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "bootstrap"
+version = "0.1.0"
+description = ""
+authors = ["Federico Celli <fedecel93@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^4.0.1"
+ruff = "^0.7.0"
+mypy = "^1.12.1"
+
+[tool.ruff]
+line-length = 79
+select = ["E", "F", "W", "B"]
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
