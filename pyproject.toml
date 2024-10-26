@@ -6,6 +6,9 @@ authors = ["Federico Celli <fedecel93@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
+numpy = "^2.1.2"
+jupyter = "^1.1.1"
+matplotlib = "^3.9.2"
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^4.0.1"
