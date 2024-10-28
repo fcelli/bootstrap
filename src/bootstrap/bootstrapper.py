@@ -43,3 +43,23 @@ class Bootstrapper:
     @property
     def results(self) -> NDArray[np.float64]:
         return self._results
+
+    def confidence_interval(
+        self, percentile: float = 95
+    ) -> tuple[float, float]:
+        """Calculates the confidence interval for the bootstrapped metric.
+
+        Args:
+            percentile (float, optional): The desired confidence level.
+                Defaults to 95.
+
+        Returns:
+            tuple[float, float]: The lower and upper bounds of the confidence
+                interval.
+        """
+        if not (0 < percentile < 100):
+            raise ValueError("Percentile must be between 0 and 100.")
+
+        lower_bound = (100 - percentile) / 2
+        upper_bound = 100 - lower_bound
+        return tuple(np.percentile(self.results, [lower_bound, upper_bound]))
