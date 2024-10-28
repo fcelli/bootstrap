@@ -42,7 +42,7 @@ class Bootstrapper:
         self.y_pred = np.array(y_pred) if y_pred is not None else y_pred
         self.metric = metric
         self.n_replicates = n_replicates
-        self._bootstrap_replicates = None
+        self._bootstrap_replicates: NDArray[np.float64] | None = None
 
         if random_state is not None:
             np.random.seed(random_state)
@@ -87,7 +87,7 @@ class Bootstrapper:
             NDArray[np.float64]: Array of bootstrapped metric values.
         """
         if self._bootstrap_replicates is None:
-            return self._generate_bootstrap_replicates()
+            self._bootstrap_replicates = self._generate_bootstrap_replicates()
         return self._bootstrap_replicates
 
     def confidence_interval(
