@@ -1,3 +1,4 @@
+import functools
 from typing import Callable
 
 import numpy as np
@@ -47,7 +48,14 @@ class Bootstrapper:
         if random_state is not None:
             np.random.seed(random_state)
 
-    def _generate_bootstrap_replicates(self) -> NDArray[np.float64]:
+    @functools.cached_property
+    def bootstrap_replicates(self) -> NDArray[np.float64]:
+        """Gets the bootstrap replicates, computing them if they have not been
+        generated yet.
+
+        Returns:
+            NDArray[np.float64]: Array of bootstrapped metric values.
+        """
         sample_size = len(self.y_true)
         indexes = np.random.randint(
             0, sample_size, self.n_replicates * sample_size
@@ -61,7 +69,7 @@ class Bootstrapper:
             )
             stacked = np.stack((r_true, r_pred), axis=1)
             bootstrap_replicates = np.array(
-                [self.metric(r[0], r[1]) for r in stacked]
+                [self.metric(s[0], s[1]) for s in stacked]
             )
         return bootstrap_replicates
 
@@ -77,18 +85,6 @@ class Bootstrapper:
             if self.y_pred is None
             else self.metric(self.y_true, self.y_pred)
         )
-
-    @property
-    def bootstrap_replicates(self) -> NDArray[np.float64]:
-        """Gets the bootstrap replicates, computing them if they have not been
-        generated yet.
-
-        Returns:
-            NDArray[np.float64]: Array of bootstrapped metric values.
-        """
-        if self._bootstrap_replicates is None:
-            self._bootstrap_replicates = self._generate_bootstrap_replicates()
-        return self._bootstrap_replicates
 
     def confidence_interval(
         self, percentile: float = 95
