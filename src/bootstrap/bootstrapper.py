@@ -4,6 +4,7 @@ from typing import Callable
 import numpy as np
 from numpy.typing import NDArray
 
+from bootstrap import plotting
 from bootstrap.utils import check_consistent_lengths
 
 
@@ -108,4 +109,10 @@ class Bootstrapper:
             np.percentile(
                 self.bootstrap_replicates, [lower_bound, upper_bound]
             )
+        )
+
+    def plot(self) -> None:
+        plotting.sampling_distribution_histogram(
+            self.bootstrap_replicates,
+            self.sample_metric,
         )
